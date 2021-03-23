@@ -10,3 +10,5 @@ export * from './profesion-persona.repository';
 export * from './profesion.repository';
 export * from './solicitud-empresa-persona.repository';
 export * from './trabaja.repository';
+export * from './tipo-usuario.repository';
+export * from './usuario.repository';

@@ -5,7 +5,7 @@ const config = {
   name: 'mysqlds',
   connector: 'mysql',
   url: '',
-  host: 'localhost:',
+  host: 'localhost',
   port: 3306,
   user: 'root',
   password: '',

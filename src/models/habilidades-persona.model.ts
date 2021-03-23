@@ -9,6 +9,15 @@ export class HabilidadesPersona extends Entity {
   })
   id?: number;
 
+  @property({
+    type: 'number',
+  })
+  personaId?: number;
+
+  @property({
+    type: 'number',
+  })
+  habilidadId?: number;
 
   constructor(data?: Partial<HabilidadesPersona>) {
     super(data);
