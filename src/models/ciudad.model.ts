@@ -1,4 +1,4 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
 import {Departamento} from './departamento.model';
 import {Persona} from './persona.model';
 
@@ -6,7 +6,7 @@ import {Persona} from './persona.model';
   settings: {
     foreignKeys: {
       fk_depto_id: {
-        name : 'fk_depto_id',
+        name: 'fk_depto_id',
         entity: 'Departamento',
         entityKey: 'id',
         foreignKey: 'departamentoId',

@@ -1,27 +1,27 @@
-import {Entity, model, property, hasMany, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {Ciudad} from './ciudad.model';
+import {Documento} from './documento.model';
+import {Estado} from './estado.model';
 import {Habilidad} from './habilidad.model';
 import {HabilidadesPersona} from './habilidades-persona.model';
-import {Documento} from './documento.model';
-import {SolicitudEmpresaPersona} from './solicitud-empresa-persona.model';
-import {Estado} from './estado.model';
-import {Ciudad} from './ciudad.model';
 import {ProfesionPersona} from './profesion-persona.model';
+import {SolicitudEmpresaPersona} from './solicitud-empresa-persona.model';
 
 @model({
   settings: {
-    foreignKeys :{
-      fk_cuidad_id : {
-        name : 'fk_cuidad_id',
+    foreignKeys: {
+      fk_cuidad_id: {
+        name: 'fk_cuidad_id',
         entity: 'Ciudad',
         entityKey: 'id',
-        foreignKey: 'cuidadId',
+        foreignKey: 'ciudadId',
       },
-      fk_estado_id : {
-        name : 'fk_estado_id',
+      fk_estado_id: {
+        name: 'fk_estado_id',
         entity: 'Estado',
         entityKey: 'id',
         foreignKey: 'estadoId',
-      }
+      },
     },
   },
 })

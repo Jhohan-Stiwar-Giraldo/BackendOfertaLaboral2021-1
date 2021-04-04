@@ -4,11 +4,11 @@ import {Entity, model, property} from '@loopback/repository';
   settings: {
     foreignKeys: {
       fk_persona_id: {
-        name : 'fk_persona_doc_id',
+        name: 'fk_persona_doc_id',
         entity: 'Persona',
         entityKey: 'id',
-        foreignKey: 'PersonaId',
-      },
+        foreignKey: 'personaId',
+      }
     },
   },
 })
