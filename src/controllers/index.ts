@@ -17,3 +17,4 @@ export * from './ciudad-persona.controller';
 export * from './persona-profesion-persona.controller';
 export * from './usuario-tipo-usuario.controller';
 export * from './tipo-usuario-usuario.controller';
+export * from './usuario.controller';
