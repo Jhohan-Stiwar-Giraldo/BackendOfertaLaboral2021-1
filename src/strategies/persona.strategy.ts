@@ -5,9 +5,12 @@ import {UserProfile} from '@loopback/security';
 import parseBearerToken from 'parse-bearer-token';
 import {SesionService} from '../services';
 
-
-export class AdminStrategy implements AuthenticationStrategy {
-  name: string = 'person';
+/**npm i @loopback/aythentication
+ * npm i @loopback/security
+ * npm i parse-bearer-token
+ */
+export class PersonaStrategy implements AuthenticationStrategy {
+  name: string = 'admin';
 
   constructor(@service(SesionService)
   public servicioSesion: SesionService) {
@@ -20,7 +23,7 @@ export class AdminStrategy implements AuthenticationStrategy {
     }
     let datos = this.servicioSesion.VerificarTokenJWT(token);
     if (datos) {
-      if (datos.data.role == "606b15d0d935297e96dbb8da") {
+      if (datos.data.role == "606b1571d935297e96dbb8d9") {
         let perfil: UserProfile = Object.assign({
           nombre_usuario: datos.data.username,
           rol: datos.data.role
