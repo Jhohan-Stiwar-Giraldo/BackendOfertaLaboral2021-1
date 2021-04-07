@@ -1,30 +1,44 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, HttpErrors, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
+
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
+import {keys as llaves} from '../config/keys';
 import {Usuario} from '../models';
+import {Credenciales} from '../models/credenciales.model';
 import {UsuarioRepository} from '../repositories';
+import {FuncionesGeneralesService, NotificacionesService, SesionService} from '../services';
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository : UsuarioRepository,
-  ) {}
+    public usuarioRepository: UsuarioRepository,
+    @service(FuncionesGeneralesService)
+    public servicioFunciones: FuncionesGeneralesService,
+    @service(NotificacionesService)
+    public servicioNotificaciones: NotificacionesService,
+    @service(SesionService)
+    public servicioSesion: SesionService
+  ) { }
 
   @post('/usuarios')
   @response(200, {
@@ -37,14 +51,63 @@ export class UsuarioController {
         'application/json': {
           schema: getModelSchemaRef(Usuario, {
             title: 'NewUsuario',
-            exclude: ['id'],
+            exclude: ['id', 'clave'],
           }),
         },
       },
     })
     usuario: Omit<Usuario, 'id'>,
   ): Promise<Usuario> {
-    return this.usuarioRepository.create(usuario);
+
+    let claveAleatoria = this.servicioFunciones.GenerarClaveAleatoria();
+    console.log(claveAleatoria);
+    let claveCifrada = this.servicioFunciones.CifrarTexto(claveAleatoria);
+    console.log(claveCifrada);
+
+    usuario.clave = claveCifrada;
+    let usuarioCreado = await this.usuarioRepository.create(usuario);
+    if (usuarioCreado) {
+      let contenido = `Hola,
+      buen dìa
+      <br />
+      Usted se ha registrado en la platafomra oferta laboral`
+      this.servicioNotificaciones.EnviarCorreoElectronico(usuarioCreado.nombre_usuario,
+        llaves.asuntoNuevoUsuario, contenido);
+    }
+
+    return usuarioCreado
+  }
+
+
+  @post('identificar-usuario')
+  async validar(
+    @requestBody(
+      {
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Credential)
+          }
+        }
+      }
+    )
+    credentiales: Credenciales
+  ): Promise<object> {
+    let usuario = await this.usuarioRepository.findOne({where: {nombre_usuario: credentiales.nombre_usuario, clave: credentiales.clave}});
+    if (usuario) {
+      //genrear un token
+      let token = this.servicioSesion.GenerarToken(usuario);
+      return {
+        user: {
+          username: usuario.nombre_usuario,
+          role: usuario.tipoUsuarioId
+        },
+        tk: token
+      };
+    } else {
+      //error
+      throw new HttpErrors[401]("las credenciales no son correctas");
+    }
+
   }
 
   @get('/usuarios/count')

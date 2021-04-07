@@ -1,32 +1,38 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
+  del, get,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
-  del,
+
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import {Ciudad} from '../models';
 import {CiudadRepository} from '../repositories';
 
+@authenticate('admin')
 export class CiudadController {
   constructor(
     @repository(CiudadRepository)
-    public ciudadRepository : CiudadRepository,
-  ) {}
+    public ciudadRepository: CiudadRepository,
+  ) { }
 
-  @post('/ciudads')
+  @post('/ciudad')
   @response(200, {
     description: 'Ciudad model instance',
     content: {'application/json': {schema: getModelSchemaRef(Ciudad)}},
@@ -47,7 +53,7 @@ export class CiudadController {
     return this.ciudadRepository.create(ciudad);
   }
 
-  @get('/ciudads/count')
+  @get('/ciudad/count')
   @response(200, {
     description: 'Ciudad model count',
     content: {'application/json': {schema: CountSchema}},
@@ -58,7 +64,8 @@ export class CiudadController {
     return this.ciudadRepository.count(where);
   }
 
-  @get('/ciudads')
+  @authenticate.skip()
+  @get('/ciudad')
   @response(200, {
     description: 'Array of Ciudad model instances',
     content: {
@@ -76,7 +83,7 @@ export class CiudadController {
     return this.ciudadRepository.find(filter);
   }
 
-  @patch('/ciudads')
+  @patch('/ciudad')
   @response(200, {
     description: 'Ciudad PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -95,7 +102,7 @@ export class CiudadController {
     return this.ciudadRepository.updateAll(ciudad, where);
   }
 
-  @get('/ciudads/{id}')
+  @get('/ciudad/{id}')
   @response(200, {
     description: 'Ciudad model instance',
     content: {
@@ -111,7 +118,7 @@ export class CiudadController {
     return this.ciudadRepository.findById(id, filter);
   }
 
-  @patch('/ciudads/{id}')
+  @patch('/ciudad/{id}')
   @response(204, {
     description: 'Ciudad PATCH success',
   })
@@ -129,7 +136,7 @@ export class CiudadController {
     await this.ciudadRepository.updateById(id, ciudad);
   }
 
-  @put('/ciudads/{id}')
+  @put('/ciudad/{id}')
   @response(204, {
     description: 'Ciudad PUT success',
   })
@@ -140,7 +147,7 @@ export class CiudadController {
     await this.ciudadRepository.replaceById(id, ciudad);
   }
 
-  @del('/ciudads/{id}')
+  @del('/ciudad/{id}')
   @response(204, {
     description: 'Ciudad DELETE success',
   })

@@ -1,3 +1,4 @@
+import {authenticate} from '@loopback/authentication';
 import {
   Count,
   CountSchema,
@@ -30,6 +31,7 @@ export class DepartamentoController {
     public departamentoRepository: DepartamentoRepository,
   ) { }
 
+  @authenticate('admin')
   @post('/departamentos')
   @response(200, {
     description: 'Departamento model instance',
