@@ -13,3 +13,4 @@ export * from './usuario.model';
 export * from './tipo-usuario.model';
 export * from './habilidades-persona.model';
 export * from './credenciales.model';
+export * from './resetear-clave.model';
